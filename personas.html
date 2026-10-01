@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador de personas</title>
+    <style>
+    body {
+        margin: 0;
+        padding: 0 16px 40px;
+        min-height: 100vh;
+        font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
+        text-align: center;
+        background-color: #dbe7f5;
+        position: relative;
+    }
+    /* Capa con la imagen de fondo y su opacidad */
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        background-image: url("https://i.redd.it/v20d2fygm7o61.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        opacity: 0.45;
+    }
+    h1 {
+        margin: 0 -16px 32px;
+        padding: 28px 16px;
+        background-color: rgba(30, 111, 217, 0.9);
+        font-size: 30px;
+        color: white;
+        letter-spacing: 1px;
+    }
+    .panel {
+        max-width: 420px;
+        margin: 0 auto 28px;
+        padding: 20px 20px 24px;
+        border-radius: 24px;
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+    }
+    .panel h2 {
+        margin: 0 0 12px;
+        font-size: 24px;
+        color: white;
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+    }
+    .panel.hombres {
+        background-color: rgba(0, 140, 255, 0.45);
+        border: 3px solid rgba(0, 170, 255, 0.9);
+        box-shadow: 0 8px 24px rgba(0, 140, 255, 0.4);
+    }
+    .panel.mujeres {
+        background-color: rgba(255, 60, 160, 0.45);
+        border: 3px solid rgba(255, 90, 180, 0.9);
+        box-shadow: 0 8px 24px rgba(255, 60, 160, 0.4);
+    }
+    .numero {
+        display: block;
+        margin: 0 auto 20px;
+        padding: 18px 0;
+        width: 200px;
+        font-size: 50px;
+        font-weight: bold;
+        line-height: 1;
+        color: white;
+        border-radius: 20px;
+        background-color: rgba(255, 255, 255, 0.25);
+        text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+    }
+    button {
+        font-size: 20px;
+        font-weight: bold;
+        color: black;
+        border: none;
+        padding: 12px 24px;
+        margin: 4px;
+        border-radius: 16px;
+        cursor: pointer;
+        background-color: rgba(255, 255, 255, 0.85);
+        transition: transform 0.1s, filter 0.15s;
+    }
+    button:hover { filter: brightness(1.08); }
+    button:active { transform: scale(0.95); }
+    button:focus-visible { outline: 3px solid #222; outline-offset: 2px; }
+    .reiniciar-todo {
+        background-color: rgba(255, 215, 0, 0.9);
+    }
+    #total {
+        margin: 0 0 20px;
+        font-size: 22px;
+        font-weight: bold;
+        color: #123;
+    }
+    .aviso {
+        margin: 16px auto 0;
+        padding: 10px 20px;
+        max-width: 320px;
+        background-color: rgba(255, 0, 0, 0.85);
+        color: white;
+        font-weight: bold;
+        border-radius: 10px;
+    }
+    </style>
+</head>
+<body>
+    <h1>Contador de personas</h1>
+
+    <p id="total">Total: 0 personas</p>
+
+    <section class="panel hombres">
+        <h2>Hombres</h2>
+        <p id="contHombres" class="numero">0</p>
+        <button id="botonMenosHombre">-1</button>
+        <button id="botonMasHombre">+1</button>
+        <button id="botonReiniciarHombre">Dejar en 0</button>
+        <p id="avisoHombre" class="aviso" hidden>NO PUEDES BAJAR A MENOS DE 0 HOMBRES</p>
+    </section>
+
+    <section class="panel mujeres">
+        <h2>Mujeres</h2>
+        <p id="contMujeres" class="numero">0</p>
+        <button id="botonMenosMujer">-1</button>
+        <button id="botonMasMujer">+1</button>
+        <button id="botonReiniciarMujer">Dejar en 0</button>
+        <p id="avisoMujer" class="aviso" hidden>NO PUEDES BAJAR A MENOS DE 0 MUJERES</p>
+    </section>
+
+    <button id="botonReiniciarTodo" class="reiniciar-todo">Reiniciar todo</button>
+
+    <script>
+        var hombres = 0;
+        var mujeres = 0;
+
+        var contHombres = document.getElementById("contHombres");
+        var contMujeres = document.getElementById("contMujeres");
+        var avisoHombre = document.getElementById("avisoHombre");
+        var avisoMujer = document.getElementById("avisoMujer");
+        var total = document.getElementById("total");
+
+        function actualizar() {
+            contHombres.textContent = hombres;
+            contMujeres.textContent = mujeres;
+            var suma = hombres + mujeres;
+            total.textContent = "Total: " + suma + (suma === 1 ? " persona" : " personas");
+        }
+
+        // ---- Hombres ----
+        document.getElementById("botonMenosHombre").addEventListener("click", function () {
+            if (hombres > 0) {
+                hombres--;
+                avisoHombre.hidden = true;
+            } else {
+                avisoHombre.hidden = false;
+            }
+            actualizar();
+        });
+
+        document.getElementById("botonMasHombre").addEventListener("click", function () {
+            hombres++;
+            avisoHombre.hidden = true;
+            actualizar();
+        });
+
+        document.getElementById("botonReiniciarHombre").addEventListener("click", function () {
+            hombres = 0;
+            avisoHombre.hidden = true;
+            actualizar();
+        });
+
+        // ---- Mujeres ----
+        document.getElementById("botonMenosMujer").addEventListener("click", function () {
+            if (mujeres > 0) {
+                mujeres--;
+                avisoMujer.hidden = true;
+            } else {
+                avisoMujer.hidden = false;
+            }
+            actualizar();
+        });
+
+        document.getElementById("botonMasMujer").addEventListener("click", function () {
+            mujeres++;
+            avisoMujer.hidden = true;
+            actualizar();
+        });
+
+        document.getElementById("botonReiniciarMujer").addEventListener("click", function () {
+            mujeres = 0;
+            avisoMujer.hidden = true;
+            actualizar();
+        });
+
+        // ---- Reiniciar todo ----
+        document.getElementById("botonReiniciarTodo").addEventListener("click", function () {
+            hombres = 0;
+            mujeres = 0;
+            avisoHombre.hidden = true;
+            avisoMujer.hidden = true;
+            actualizar();
+        });
+    </script>
+</body>
+</html>
