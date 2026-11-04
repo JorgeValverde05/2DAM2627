@@ -51,7 +51,7 @@
         border-radius: 6px;
         text-align: center;
     }
-   
+    
     .contenedor-principal {
         display: flex;
         justify-content: center;
@@ -68,7 +68,7 @@
         width: 100%;
         max-width: 480px;
     }
-   
+    
     .panel {
         padding: 20px 20px 24px;
         border-radius: 24px;
@@ -91,7 +91,7 @@
         border: 3px solid rgba(255, 90, 180, 0.9);
         box-shadow: 0 8px 24px rgba(255, 60, 160, 0.4);
     }
-   
+    
     .controles {
         display: flex;
         justify-content: center;
@@ -118,7 +118,7 @@
         background-color: rgba(255, 255, 255, 0.25);
         text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
     }
-   
+    
     button {
         font-size: 20px;
         font-weight: bold;
@@ -138,7 +138,7 @@
     button:hover { filter: brightness(1.08); }
     button:active { transform: scale(0.95); }
     button:focus-visible { outline: 3px solid #222; outline-offset: 2px; }
-   
+    
     .reiniciar-todo {
         background-color: rgba(255, 215, 0, 0.9);
         width: 100%;
@@ -162,7 +162,7 @@
         font-weight: bold;
         border-radius: 10px;
     }
-   
+    
     .transportes {
         background-color: rgba(0, 0, 0, 0.75);
         color: #FFD700;
@@ -183,21 +183,18 @@
 <body>
     <h1>Contador de personas</h1>
 
-
     <div class="limite-container">
         <label for="limitePersonas">Límite de personas:</label>
         <input type="number" id="limitePersonas" min="0" placeholder="Sin límite">
     </div>
     <br>
 
-
     <p id="total">Total: 0 personas</p>
     <p id="avisoLimite" class="aviso" hidden>¡LÍMITE DE AFORO ALCANZADO!</p>
 
-
     <!-- Contenedor flex principal -->
     <div class="contenedor-principal">
-       
+        
         <!-- Columna Izquierda: Géneros y botón de reinicio -->
         <div class="seccion-generos">
             <section class="panel hombres">
@@ -208,9 +205,9 @@
                         <button class="pequeno" onclick="cambiarHombres(-100)">-100</button>
                     </div>
                     <button onclick="cambiarHombres(-1)">-1</button>
-                   
+                    
                     <p id="contHombres" class="numero">0</p>
-                   
+                    
                     <button onclick="cambiarHombres(1)">+1</button>
                     <div class="columna-botones">
                         <button class="pequeno" onclick="cambiarHombres(10)">+10</button>
@@ -221,7 +218,6 @@
                 <p id="avisoHombre" class="aviso" hidden>NO PUEDES BAJAR A MENOS DE 0</p>
             </section>
 
-
             <section class="panel mujeres">
                 <h2>Mujeres</h2>
                 <div class="controles">
@@ -230,9 +226,9 @@
                         <button class="pequeno" onclick="cambiarMujeres(-100)">-100</button>
                     </div>
                     <button onclick="cambiarMujeres(-1)">-1</button>
-                   
+                    
                     <p id="contMujeres" class="numero">0</p>
-                   
+                    
                     <button onclick="cambiarMujeres(1)">+1</button>
                     <div class="columna-botones">
                         <button class="pequeno" onclick="cambiarMujeres(10)">+10</button>
@@ -242,10 +238,9 @@
                 <button onclick="reiniciarMujeres()">Dejar en 0</button>
                 <p id="avisoMujer" class="aviso" hidden>NO PUEDES BAJAR A MENOS DE 0</p>
             </section>
-           
+            
             <button id="botonReiniciarTodo" class="reiniciar-todo" onclick="reiniciarTodo()">Reiniciar todo</button>
         </div>
-
 
         <!-- Columna Derecha: Panel de Transportes -->
         <div class="transportes">
@@ -257,14 +252,11 @@
             ✈️ Aviones: <span id="numAviones">0</span>
         </div>
 
-
     </div>
-
 
     <script>
         var hombres = 0;
         var mujeres = 0;
-
 
         var contHombres = document.getElementById("contHombres");
         var contMujeres = document.getElementById("contMujeres");
@@ -274,20 +266,17 @@
         var inputLimite = document.getElementById("limitePersonas");
         var avisoLimite = document.getElementById("avisoLimite");
 
-
         var spanCoches = document.getElementById("numCoches");
         var spanAutobuses = document.getElementById("numAutobuses");
         var spanTrenes = document.getElementById("numTrenes");
         var spanAviones = document.getElementById("numAviones");
 
-
         function actualizar() {
             contHombres.textContent = hombres;
             contMujeres.textContent = mujeres;
-           
+            
             var suma = hombres + mujeres;
             total.textContent = "Total: " + suma + (suma === 1 ? " persona" : " personas");
-
 
             // Comprobar Límite
             var limite = parseInt(inputLimite.value);
@@ -297,7 +286,6 @@
                 avisoLimite.hidden = true;
             }
 
-
             // Calcular Transportes
             spanCoches.textContent = Math.ceil(suma / 5);
             spanAutobuses.textContent = Math.ceil(suma / 50);
@@ -305,12 +293,11 @@
             spanAviones.textContent = Math.ceil(suma / 200);
         }
 
-
         // Función inteligente para evitar sobrepasar el límite al sumar
         function calcularAjusteSuma(cantidad) {
             var limite = parseInt(inputLimite.value);
             var suma = hombres + mujeres;
-           
+            
             // Si estamos intentando sumar y hay un límite puesto
             if (cantidad > 0 && !isNaN(limite) && limite > 0) {
                 if (suma >= limite) {
@@ -322,14 +309,12 @@
             return cantidad; // Si no hay límite o estamos restando, la cantidad se queda igual
         }
 
-
         // Lógica Hombres
         function cambiarHombres(cantidad) {
             if (cantidad > 0) {
                 cantidad = calcularAjusteSuma(cantidad);
                 if (cantidad === 0) return; // Bloquear si devuelve 0
             }
-
 
             if (hombres + cantidad < 0) {
                 avisoHombre.hidden = false;
@@ -340,13 +325,11 @@
             actualizar();
         }
 
-
         function reiniciarHombres() {
             hombres = 0;
             avisoHombre.hidden = true;
             actualizar();
         }
-
 
         // Lógica Mujeres
         function cambiarMujeres(cantidad) {
@@ -354,7 +337,6 @@
                 cantidad = calcularAjusteSuma(cantidad);
                 if (cantidad === 0) return; // Bloquear si devuelve 0
             }
-
 
             if (mujeres + cantidad < 0) {
                 avisoMujer.hidden = false;
@@ -365,13 +347,11 @@
             actualizar();
         }
 
-
         function reiniciarMujeres() {
             mujeres = 0;
             avisoMujer.hidden = true;
             actualizar();
         }
-
 
         // Reiniciar Todo
         function reiniciarTodo() {
@@ -381,7 +361,6 @@
             avisoMujer.hidden = true;
             actualizar();
         }
-
 
         // Si cambiamos el número del límite a mano, refrescamos los avisos en el momento
         inputLimite.addEventListener('input', actualizar);
