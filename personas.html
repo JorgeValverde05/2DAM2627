@@ -14,7 +14,6 @@
         background-color: #dbe7f5;
         position: relative;
     }
-    /* Capa con la imagen de fondo y su opacidad */
     body::before {
         content: "";
         position: fixed;
@@ -27,16 +26,50 @@
         opacity: 0.45;
     }
     h1 {
-        margin: 0 -16px 32px;
+        margin: 0 -16px 20px;
         padding: 28px 16px;
         background-color: rgba(30, 111, 217, 0.9);
         font-size: 30px;
         color: white;
         letter-spacing: 1px;
     }
+    .limite-container {
+        margin-bottom: 20px;
+        background: rgba(255, 255, 255, 0.8);
+        display: inline-block;
+        padding: 10px 20px;
+        border-radius: 12px;
+        font-weight: bold;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .limite-container input {
+        font-size: 18px;
+        width: 80px;
+        padding: 4px;
+        margin-left: 10px;
+        border: 2px solid #333;
+        border-radius: 6px;
+        text-align: center;
+    }
+    
+    .contenedor-principal {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 40px;
+        max-width: 1000px;
+        margin: 0 auto;
+        flex-wrap: wrap;
+    }
+    .seccion-generos {
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+        width: 100%;
+        max-width: 480px;
+    }
+    
     .panel {
-        max-width: 420px;
-        margin: 0 auto 28px;
         padding: 20px 20px 24px;
         border-radius: 24px;
         backdrop-filter: blur(6px);
@@ -58,42 +91,67 @@
         border: 3px solid rgba(255, 90, 180, 0.9);
         box-shadow: 0 8px 24px rgba(255, 60, 160, 0.4);
     }
+    
+    .controles {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 15px;
+    }
+    .columna-botones {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
     .numero {
-        display: block;
-        margin: 0 auto 20px;
-        padding: 18px 0;
-        width: 200px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+        width: 140px;
+        height: 80px;
         font-size: 50px;
         font-weight: bold;
-        line-height: 1;
         color: white;
         border-radius: 20px;
         background-color: rgba(255, 255, 255, 0.25);
         text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
     }
+    
     button {
         font-size: 20px;
         font-weight: bold;
         color: black;
         border: none;
-        padding: 12px 24px;
-        margin: 4px;
+        padding: 12px 20px;
         border-radius: 16px;
         cursor: pointer;
         background-color: rgba(255, 255, 255, 0.85);
         transition: transform 0.1s, filter 0.15s;
     }
+    button.pequeno {
+        font-size: 14px;
+        padding: 6px 12px;
+        border-radius: 10px;
+    }
     button:hover { filter: brightness(1.08); }
     button:active { transform: scale(0.95); }
     button:focus-visible { outline: 3px solid #222; outline-offset: 2px; }
+    
     .reiniciar-todo {
         background-color: rgba(255, 215, 0, 0.9);
+        width: 100%;
     }
     #total {
-        margin: 0 0 20px;
-        font-size: 22px;
+        margin: 0 0 10px;
+        font-size: 24px;
         font-weight: bold;
         color: #123;
+        background: rgba(255,255,255,0.6);
+        display: inline-block;
+        padding: 5px 15px;
+        border-radius: 10px;
     }
     .aviso {
         margin: 16px auto 0;
@@ -104,32 +162,97 @@
         font-weight: bold;
         border-radius: 10px;
     }
+    
+    .transportes {
+        background-color: rgba(0, 0, 0, 0.75);
+        color: #FFD700;
+        width: 100%;
+        max-width: 300px;
+        padding: 25px;
+        border-radius: 20px;
+        border: 3px solid #FFD700;
+        font-size: 19px;
+        font-weight: bold;
+        text-align: left;
+        line-height: 2;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+    .transportes span { color: white; float: right; }
     </style>
 </head>
 <body>
     <h1>Contador de personas</h1>
 
+    <div class="limite-container">
+        <label for="limitePersonas">Límite de personas:</label>
+        <input type="number" id="limitePersonas" min="0" placeholder="Sin límite">
+    </div>
+    <br>
+
     <p id="total">Total: 0 personas</p>
+    <p id="avisoLimite" class="aviso" hidden>¡LÍMITE DE AFORO ALCANZADO!</p>
 
-    <section class="panel hombres">
-        <h2>Hombres</h2>
-        <p id="contHombres" class="numero">0</p>
-        <button id="botonMenosHombre">-1</button>
-        <button id="botonMasHombre">+1</button>
-        <button id="botonReiniciarHombre">Dejar en 0</button>
-        <p id="avisoHombre" class="aviso" hidden>NO PUEDES BAJAR A MENOS DE 0 HOMBRES</p>
-    </section>
+    <!-- Contenedor flex principal -->
+    <div class="contenedor-principal">
+        
+        <!-- Columna Izquierda: Géneros y botón de reinicio -->
+        <div class="seccion-generos">
+            <section class="panel hombres">
+                <h2>Hombres</h2>
+                <div class="controles">
+                    <div class="columna-botones">
+                        <button class="pequeno" onclick="cambiarHombres(-10)">-10</button>
+                        <button class="pequeno" onclick="cambiarHombres(-100)">-100</button>
+                    </div>
+                    <button onclick="cambiarHombres(-1)">-1</button>
+                    
+                    <p id="contHombres" class="numero">0</p>
+                    
+                    <button onclick="cambiarHombres(1)">+1</button>
+                    <div class="columna-botones">
+                        <button class="pequeno" onclick="cambiarHombres(10)">+10</button>
+                        <button class="pequeno" onclick="cambiarHombres(100)">+100</button>
+                    </div>
+                </div>
+                <button onclick="reiniciarHombres()">Dejar en 0</button>
+                <p id="avisoHombre" class="aviso" hidden>NO PUEDES BAJAR A MENOS DE 0</p>
+            </section>
 
-    <section class="panel mujeres">
-        <h2>Mujeres</h2>
-        <p id="contMujeres" class="numero">0</p>
-        <button id="botonMenosMujer">-1</button>
-        <button id="botonMasMujer">+1</button>
-        <button id="botonReiniciarMujer">Dejar en 0</button>
-        <p id="avisoMujer" class="aviso" hidden>NO PUEDES BAJAR A MENOS DE 0 MUJERES</p>
-    </section>
+            <section class="panel mujeres">
+                <h2>Mujeres</h2>
+                <div class="controles">
+                    <div class="columna-botones">
+                        <button class="pequeno" onclick="cambiarMujeres(-10)">-10</button>
+                        <button class="pequeno" onclick="cambiarMujeres(-100)">-100</button>
+                    </div>
+                    <button onclick="cambiarMujeres(-1)">-1</button>
+                    
+                    <p id="contMujeres" class="numero">0</p>
+                    
+                    <button onclick="cambiarMujeres(1)">+1</button>
+                    <div class="columna-botones">
+                        <button class="pequeno" onclick="cambiarMujeres(10)">+10</button>
+                        <button class="pequeno" onclick="cambiarMujeres(100)">+100</button>
+                    </div>
+                </div>
+                <button onclick="reiniciarMujeres()">Dejar en 0</button>
+                <p id="avisoMujer" class="aviso" hidden>NO PUEDES BAJAR A MENOS DE 0</p>
+            </section>
+            
+            <button id="botonReiniciarTodo" class="reiniciar-todo" onclick="reiniciarTodo()">Reiniciar todo</button>
+        </div>
 
-    <button id="botonReiniciarTodo" class="reiniciar-todo">Reiniciar todo</button>
+        <!-- Columna Derecha: Panel de Transportes -->
+        <div class="transportes">
+            Vehículos necesarios:
+            <hr style="border-color: #FFD700; margin-bottom: 15px;">
+            🚗 Coches: <span id="numCoches">0</span><br>
+            🚌 Autobuses: <span id="numAutobuses">0</span><br>
+            🚆 Trenes: <span id="numTrenes">0</span><br>
+            ✈️ Aviones: <span id="numAviones">0</span>
+        </div>
+
+    </div>
 
     <script>
         var hombres = 0;
@@ -140,68 +263,107 @@
         var avisoHombre = document.getElementById("avisoHombre");
         var avisoMujer = document.getElementById("avisoMujer");
         var total = document.getElementById("total");
+        var inputLimite = document.getElementById("limitePersonas");
+        var avisoLimite = document.getElementById("avisoLimite");
+
+        var spanCoches = document.getElementById("numCoches");
+        var spanAutobuses = document.getElementById("numAutobuses");
+        var spanTrenes = document.getElementById("numTrenes");
+        var spanAviones = document.getElementById("numAviones");
 
         function actualizar() {
             contHombres.textContent = hombres;
             contMujeres.textContent = mujeres;
+            
             var suma = hombres + mujeres;
             total.textContent = "Total: " + suma + (suma === 1 ? " persona" : " personas");
+
+            // Comprobar Límite
+            var limite = parseInt(inputLimite.value);
+            if (!isNaN(limite) && limite > 0 && suma >= limite) {
+                avisoLimite.hidden = false;
+            } else {
+                avisoLimite.hidden = true;
+            }
+
+            // Calcular Transportes
+            spanCoches.textContent = Math.ceil(suma / 5);
+            spanAutobuses.textContent = Math.ceil(suma / 50);
+            spanTrenes.textContent = Math.ceil(suma / 100);
+            spanAviones.textContent = Math.ceil(suma / 200);
         }
 
-        // ---- Hombres ----
-        document.getElementById("botonMenosHombre").addEventListener("click", function () {
-            if (hombres > 0) {
-                hombres--;
-                avisoHombre.hidden = true;
-            } else {
+        // Función inteligente para evitar sobrepasar el límite al sumar
+        function calcularAjusteSuma(cantidad) {
+            var limite = parseInt(inputLimite.value);
+            var suma = hombres + mujeres;
+            
+            // Si estamos intentando sumar y hay un límite puesto
+            if (cantidad > 0 && !isNaN(limite) && limite > 0) {
+                if (suma >= limite) {
+                    return 0; // Ya está lleno, anulamos la suma devolviendo un 0
+                } else if (suma + cantidad > limite) {
+                    return limite - suma; // Suma de golpe pero ajustada para clavar el límite justo
+                }
+            }
+            return cantidad; // Si no hay límite o estamos restando, la cantidad se queda igual
+        }
+
+        // Lógica Hombres
+        function cambiarHombres(cantidad) {
+            if (cantidad > 0) {
+                cantidad = calcularAjusteSuma(cantidad);
+                if (cantidad === 0) return; // Bloquear si devuelve 0
+            }
+
+            if (hombres + cantidad < 0) {
                 avisoHombre.hidden = false;
-            }
-            actualizar();
-        });
-
-        document.getElementById("botonMasHombre").addEventListener("click", function () {
-            hombres++;
-            avisoHombre.hidden = true;
-            actualizar();
-        });
-
-        document.getElementById("botonReiniciarHombre").addEventListener("click", function () {
-            hombres = 0;
-            avisoHombre.hidden = true;
-            actualizar();
-        });
-
-        // ---- Mujeres ----
-        document.getElementById("botonMenosMujer").addEventListener("click", function () {
-            if (mujeres > 0) {
-                mujeres--;
-                avisoMujer.hidden = true;
             } else {
-                avisoMujer.hidden = false;
+                hombres += cantidad;
+                avisoHombre.hidden = true;
             }
             actualizar();
-        });
+        }
 
-        document.getElementById("botonMasMujer").addEventListener("click", function () {
-            mujeres++;
-            avisoMujer.hidden = true;
+        function reiniciarHombres() {
+            hombres = 0;
+            avisoHombre.hidden = true;
             actualizar();
-        });
+        }
 
-        document.getElementById("botonReiniciarMujer").addEventListener("click", function () {
+        // Lógica Mujeres
+        function cambiarMujeres(cantidad) {
+            if (cantidad > 0) {
+                cantidad = calcularAjusteSuma(cantidad);
+                if (cantidad === 0) return; // Bloquear si devuelve 0
+            }
+
+            if (mujeres + cantidad < 0) {
+                avisoMujer.hidden = false;
+            } else {
+                mujeres += cantidad;
+                avisoMujer.hidden = true;
+            }
+            actualizar();
+        }
+
+        function reiniciarMujeres() {
             mujeres = 0;
             avisoMujer.hidden = true;
             actualizar();
-        });
+        }
 
-        // ---- Reiniciar todo ----
-        document.getElementById("botonReiniciarTodo").addEventListener("click", function () {
+        // Reiniciar Todo
+        function reiniciarTodo() {
             hombres = 0;
             mujeres = 0;
             avisoHombre.hidden = true;
             avisoMujer.hidden = true;
             actualizar();
-        });
+        }
+
+        // Si cambiamos el número del límite a mano, refrescamos los avisos en el momento
+        inputLimite.addEventListener('input', actualizar);
     </script>
 </body>
 </html>
